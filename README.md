@@ -2,6 +2,15 @@
 
 A Flutter application for tracking NFL analytics using the ESPN API.
 
+## 🚀 Quick Start - Deploy to Web
+
+Want to share this app via link? See **[NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md)** for 2-minute deployment guide.
+
+```bash
+./build-web.sh  # Build for web
+# Then drag build/web to netlify.com/drop
+```
+
 ## Features
 
 - **Week Events Viewer**: Browse NFL games by season, week, and season type
@@ -51,6 +60,13 @@ https://sports.core.api.espn.com/v2/sports/football/leagues/nfl
 - `2` - Regular Season
 - `3` - Postseason
 
+### CORS Handling
+The app automatically detects the platform and handles CORS appropriately:
+- **Web builds**: Uses CORS proxy (`corsproxy.io`) to bypass browser restrictions
+- **Mobile/Desktop**: Direct API access (no proxy needed)
+
+This ensures the app works seamlessly across all platforms.
+
 ## Setup
 
 ### Prerequisites
@@ -92,6 +108,7 @@ This version includes several improvements over the original implementation:
 - ✅ Added HTTP request timeouts (10 seconds)
 - ✅ Safe date parsing with error handling
 - ✅ Throttled concurrent API requests to avoid rate limiting
+- ✅ CORS handling for web deployment
 
 ### Enhanced Features
 - ✅ Comprehensive data models with team/score information
