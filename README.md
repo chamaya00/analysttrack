@@ -1,70 +1,150 @@
-# Getting Started with Create React App
+# AnalystTrack
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Flutter application for tracking NFL analytics using the ESPN API.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Week Events Viewer**: Browse NFL games by season, week, and season type
+- **Real-time Data**: Fetch live game information from ESPN's API
+- **Comprehensive Game Details**: View teams, scores, venues, and game status
+- **Progress Tracking**: See loading progress when fetching multiple events
+- **Error Handling**: Robust error handling with user-friendly messages
+- **Throttled Requests**: API calls are batched to avoid rate limiting
 
-### `npm start`
+## Architecture
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Models (`lib/models/`)
+- `WeekEventsResponse`: Contains event IDs for a specific week
+- `EventDetails`: Detailed game information
+- `Competition`: Competition/game details including teams
+- `Competitor`: Team information with scores
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Services (`lib/services/`)
+- `ESPNNFLService`: Main service for interacting with ESPN's NFL API
+  - Request timeout handling
+  - Batch processing with throttling
+  - Comprehensive error handling
+  - Progress callbacks
 
-### `npm test`
+### Screens (`lib/screens/`)
+- `NFLWeekEventsScreen`: Main screen for browsing NFL events
+  - Proper controller lifecycle management
+  - Loading states with progress
+  - Error states with retry
+  - Segmented season type selection
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## ESPN API
 
-### `npm run build`
+This app uses ESPN's public NFL API:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Base URL
+```
+https://sports.core.api.espn.com/v2/sports/football/leagues/nfl
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Endpoints Used
+- `/seasons/{year}/types/{seasonType}/weeks/{week}/events` - Get event IDs
+- `/events/{eventId}` - Get event details
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Season Types
+- `1` - Preseason
+- `2` - Regular Season
+- `3` - Postseason
 
-### `npm run eject`
+## Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Prerequisites
+- Flutter SDK (>=3.0.0)
+- Dart SDK (>=3.0.0)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd analysttrack
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Install dependencies:
+```bash
+flutter pub get
+```
 
-## Learn More
+3. Run the app:
+```bash
+flutter run
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Usage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Select the season year (e.g., 2025)
+2. Select the week number (1-18)
+3. Choose season type (Preseason/Regular/Postseason)
+4. Tap "Load Events" to fetch games
+5. Tap on any game card to see detailed information
 
-### Code Splitting
+## Code Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This version includes several improvements over the original implementation:
 
-### Analyzing the Bundle Size
+### Critical Fixes
+- ✅ Fixed memory leaks with proper TextEditingController disposal
+- ✅ Added HTTP request timeouts (10 seconds)
+- ✅ Safe date parsing with error handling
+- ✅ Throttled concurrent API requests to avoid rate limiting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Enhanced Features
+- ✅ Comprehensive data models with team/score information
+- ✅ Loading progress indicator
+- ✅ Season type selector (Preseason/Regular/Postseason)
+- ✅ Better error messages with error type detection
+- ✅ Status indicators (Scheduled/Live/Final)
+- ✅ Venue information
 
-### Making a Progressive Web App
+### Code Quality
+- ✅ Proper widget lifecycle management
+- ✅ Custom exception classes
+- ✅ Progress callbacks for async operations
+- ✅ Material 3 design
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Project Structure
 
-### Advanced Configuration
+```
+analysttrack/
+├── lib/
+│   ├── main.dart                    # App entry point
+│   ├── models/
+│   │   └── event_models.dart        # Data models
+│   ├── services/
+│   │   └── espn_nfl_service.dart    # API service
+│   └── screens/
+│       └── nfl_week_events_screen.dart  # Main screen
+├── test/                            # Unit tests
+├── pubspec.yaml                     # Dependencies
+└── README.md                        # Documentation
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Dependencies
 
-### Deployment
+- `http: ^1.1.0` - HTTP requests
+- `flutter` - Flutter framework
+- `cupertino_icons` - iOS-style icons
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Future Enhancements
 
-### `npm run build` fails to minify
+- [ ] Add caching for API responses
+- [ ] Implement team-specific queries
+- [ ] Add favorite teams
+- [ ] Show play-by-play data
+- [ ] Add statistics and player information
+- [ ] Dark mode support
+- [ ] Search functionality
+- [ ] Filter by team
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+MIT License - See LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
