@@ -1,11 +1,22 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import '../models/event_models.dart';
 
 /// Service for interacting with ESPN's NFL API
 class ESPNNFLService {
-  static const String baseUrl =
-      'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl';
+  /// Base URL for ESPN API
+  /// On web, uses CORS proxy to avoid browser CORS restrictions
+  /// On mobile/desktop, uses direct API access
+  static String get baseUrl {
+    if (kIsWeb) {
+      // Use CORS proxy for web browsers
+      return 'https://corsproxy.io/?https://sports.core.api.espn.com/v2/sports/football/leagues/nfl';
+    } else {
+      // Direct API access for mobile/desktop
+      return 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl';
+    }
+  }
 
   /// Timeout duration for HTTP requests
   static const Duration requestTimeout = Duration(seconds: 10);
