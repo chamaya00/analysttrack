@@ -4,11 +4,14 @@ A Flutter application for tracking NFL analytics using the ESPN API.
 
 ## 🚀 Quick Start - Deploy to Web
 
-Want to share this app via link? See **[NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md)** for 2-minute deployment guide.
+Want to share this app via link? Choose your preferred platform:
+
+- **[VERCEL_DEPLOY.md](VERCEL_DEPLOY.md)** - ⭐ Recommended (faster, more build minutes)
+- **[NETLIFY_DEPLOY.md](NETLIFY_DEPLOY.md)** - Alternative (simpler for beginners)
 
 ```bash
 ./build-web.sh  # Build for web
-# Then drag build/web to netlify.com/drop
+# Then drag build/web to vercel.com or netlify.com
 ```
 
 ## Features
