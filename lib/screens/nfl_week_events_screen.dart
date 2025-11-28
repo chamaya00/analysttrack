@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/event_models.dart';
 import '../services/espn_nfl_service.dart';
+import 'game_player_stats_screen.dart';
 
 /// Screen displaying NFL events for a specific week
 class NFLWeekEventsScreen extends StatefulWidget {
@@ -450,6 +451,21 @@ class _NFLWeekEventsScreenState extends State<NFLWeekEventsScreen> {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GamePlayerStatsScreen(
+                    eventId: event.id,
+                    eventName: event.name,
+                  ),
+                ),
+              );
+            },
+            child: const Text('View Player Stats'),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Close'),
