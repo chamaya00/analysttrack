@@ -5,6 +5,9 @@
 [build.environment]
   FLUTTER_VERSION = "3.24.5"
 
+[[plugins]]
+  package = "netlify-plugin-flutter"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
