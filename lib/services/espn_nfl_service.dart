@@ -381,14 +381,66 @@ class ESPNNFLService {
 
   /// Search for players by name
   ///
-  /// Note: This is a helper method that would typically use a search endpoint.
-  /// ESPN's public API doesn't have a direct search endpoint, so this is
-  /// left as a placeholder for future implementation.
+  /// Searches the ESPN API for athletes matching the given query string.
+  /// Returns a list of matching athletes with their basic information.
   ///
-  /// [query] - Player name to search for
-  /// Throws [UnimplementedError]
-  Future<List<Athlete>> searchPlayers(String query) async {
-    throw UnimplementedError('Player search not yet implemented');
+  /// [query] - Player name to search for (minimum 2 characters)
+  /// [limit] - Maximum number of results to return (default 20)
+  /// Throws [ESPNServiceException] if the request fails
+  Future<List<Athlete>> searchPlayers(String query, {int limit = 20}) async {
+    if (query.trim().length < 2) {
+      return [];
+    }
+
+    // Use the site API search endpoint
+    final encodedQuery = Uri.encodeComponent(query.trim());
+    final url = kIsWeb
+        ? 'https://corsproxy.io/?https://site.api.espn.com/apis/common/v3/search?query=$encodedQuery&limit=$limit&sports=football&leagues=nfl'
+        : 'https://site.api.espn.com/apis/common/v3/search?query=$encodedQuery&limit=$limit&sports=football&leagues=nfl';
+
+    try {
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(requestTimeout);
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        final athletes = <Athlete>[];
+
+        // Parse the results
+        final results = json['results'] as List?;
+        if (results != null) {
+          for (final result in results) {
+            try {
+              // Check if this is an athlete result
+              if (result['type'] == 'athlete') {
+                final athlete = result['athlete'] as Map<String, dynamic>?;
+                if (athlete != null) {
+                  athletes.add(Athlete.fromJson(athlete));
+                }
+              }
+            } catch (e) {
+              // Skip invalid athlete data
+              continue;
+            }
+          }
+        }
+
+        return athletes;
+      } else {
+        throw ESPNServiceException(
+          'Failed to search for players: ${response.statusCode}',
+          statusCode: response.statusCode,
+          responseBody: response.body,
+        );
+      }
+    } catch (e) {
+      if (e is ESPNServiceException) rethrow;
+      throw ESPNServiceException(
+        'Network error searching for players: $e',
+        originalError: e,
+      );
+    }
   }
 }
 

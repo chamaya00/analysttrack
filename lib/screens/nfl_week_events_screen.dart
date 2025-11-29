@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/event_models.dart';
 import '../services/espn_nfl_service.dart';
 import 'game_player_stats_screen.dart';
+import 'player_search_screen.dart';
 
 /// Screen displaying NFL events for a specific week
 class NFLWeekEventsScreen extends StatefulWidget {
@@ -114,6 +115,20 @@ class _NFLWeekEventsScreenState extends State<NFLWeekEventsScreen> {
       appBar: AppBar(
         title: Text('NFL Week $_week - $_season'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_search),
+            tooltip: 'Search Players',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PlayerSearchScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
